@@ -573,6 +573,7 @@ if (SERVER) then
 		local totalPoints = 0
 
 		for k, v in pairs(attributes) do
+			v = math.Clamp(v, 0, nut.config.maximumPoints)
 			totalPoints = totalPoints + v
 		end
 
