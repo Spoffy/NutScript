@@ -126,7 +126,7 @@ else
 			nut.util.Notify("You have updated this vendor's data.", client)
 		end
 	end)
--------------------------------------
+
 	netstream.Hook("nut_VendorBuy", function(client, data)
 		local entity = data[1]
 		local class = data[2]
@@ -164,13 +164,14 @@ else
 			client:UpdateInv(class)
 			client:TakeMoney(price)
 			entity:SetNetVar( "money", entity:GetNetVar( "money", 0 ) + price )
+
 			netstream.Start(client, "nut_CashUpdate")
 			nut.util.Notify(nut.lang.Get("purchased_for", itemTable.name, nut.currency.GetName(price)), client)
 		else
 			nut.util.Notify(nut.lang.Get("no_afford"), client)
 		end
 	end)
-	---------------------------
+
 	netstream.Hook("nut_VendorSell", function(client, data)
 		local entity = data[1]
 		local class = data[2]
@@ -205,15 +206,16 @@ else
 			price = data[class].price
 		end
 		
-		if ( tonumber( entity:GetNetVar( "money", 0 ) ) < price ) then
+		if (tonumber(entity:GetNetVar("money", 0)) < price ) then
 			nut.util.Notify(nut.lang.Get("vendor_no_afford"), client)
 			return
 		end
 		
-		if ( client:HasItem( class, 1 ) ) then
+		if (client:HasItem( class, 1 )) then
 			client:UpdateInv( class, -1 )
 			client:GiveMoney(price)
 			entity:SetNetVar( "money", entity:GetNetVar( "money", 0 ) - price )
+
 			netstream.Start(client, "nut_CashUpdate")
 			nut.util.Notify(nut.lang.Get("sold", itemTable.name, nut.currency.GetName(price)), client)
 		else

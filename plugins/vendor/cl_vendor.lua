@@ -8,7 +8,6 @@ local PANEL = {}
 
 		self.property = self:Add("DPropertySheet")
 		self.property:Dock(FILL)
-
 	end
 
 	function PANEL:SetEntity(entity)
@@ -30,6 +29,7 @@ local PANEL = {}
 			self.admin = vgui.Create("nut_VendorAdminMenu")
 			self.property:AddSheet("Admin", self.admin, "icon16/star.png")
 		end
+
 		if (IsValid(self.admin)) then
 			self.admin:SetEntity(entity)
 		end
@@ -37,20 +37,19 @@ local PANEL = {}
 	end
 vgui.Register("nut_Vendor", PANEL, "DFrame")
 
--- PLEASE
 netstream.Hook("nut_CashUpdate", function( data )
 	local v = nut.gui.vendor
 	if v then
 		if v.buying then
-			v.buying.money.desc:SetText( nut.lang.Get( "vendor_cash", nut.currency.GetName( v.vendorentity:GetNetVar("money", 0) ) ) )
+			v.buying.money.desc:SetText(nut.lang.Get( "vendor_cash", nut.currency.GetName(v.vendorentity:GetNetVar("money", 0))))
 		end
+
 		if v.selling then
-			v.selling.money.desc:SetText( nut.lang.Get( "vendor_cash", nut.currency.GetName( v.vendorentity:GetNetVar("money", 0) ) ) )
+			v.selling.money.desc:SetText(nut.lang.Get( "vendor_cash", nut.currency.GetName(v.vendorentity:GetNetVar("money", 0))))
 		end
 	end
 end)
 
--- VENDOR CONTENT
 local PANEL = {}
 	function PANEL:Init()
 		self.money = self:Add("DPanel")
@@ -93,7 +92,6 @@ local PANEL = {}
 				continue
 			end
 
-			--- SELLING STUFFS
 			if (data[class] and data[class].selling and !boolBuying ) then
 				local category = itemTable.category
 				local category2 = string.lower(category)
@@ -158,7 +156,6 @@ local PANEL = {}
 				end
 			end
 
-			-- BUYING
 			if (data[class] and data[class].buying and boolBuying) then
 				local category = itemTable.category
 				local category2 = string.lower(category)
@@ -233,7 +230,6 @@ local PANEL = {}
 	end
 vgui.Register("nut_VendorMenu", PANEL, "DPanel")
 
--- ADMIN
 local PANEL = {}
 	function PANEL:Init()
 		self:SetDrawBackground(false)
@@ -279,16 +275,9 @@ local PANEL = {}
 					line:SetValue(3, line.selling and "✔" or "")
 				end):SetImage("icon16/money_delete.png")
 				menu:Open()
-			end
-			
-			/* -- old code: Chessnut
-			if (input.IsMouseDown(MOUSE_LEFT)) then
-				line.selling = !line.selling
-				line:SetValue(3, line.selling and "✔" or "")
-			end
-			*/
-			
+			end			
 		end
+
 		self.list.OnRowRightClick = function(parent, index, line)
 			Derma_StringRequest(line.itemTable.name, "What would you like the price to be?", "0", function(text)
 				local amount = tonumber(text) or 0
@@ -423,8 +412,6 @@ local PANEL = {}
 			self.buy:SetChecked( vendorAction.buy )
 		end
 		
-		
-		-- Set vendor's money
 		local adj = self.scroll:Add("DLabel")
 		adj:SetText("Buying Money Adjustment")
 		adj:DockMargin(3, 3, 3, 3)
@@ -438,7 +425,6 @@ local PANEL = {}
 		self.adj:DockMargin(3, 3, 3, 3)
 		self.adj:SetText(entity:GetNetVar("buyadjustment", .5))
 		
-		-- Set vendor's money
 		local money = self.scroll:Add("DLabel")
 		money:SetText("Vendor's Money")
 		money:DockMargin(3, 3, 3, 3)
@@ -452,7 +438,6 @@ local PANEL = {}
 		self.money:DockMargin(3, 3, 3, 3)
 		self.money:SetText(entity:GetNetVar("money", 100))
 		
-		-- Description
 		local desc = self.scroll:Add("DLabel")
 		desc:SetText("Description")
 		desc:DockMargin(3, 3, 3, 3)
@@ -466,7 +451,6 @@ local PANEL = {}
 		self.desc:DockMargin(3, 3, 3, 3)
 		self.desc:SetText(entity:GetNetVar("desc", nut.lang.Get("no_desc")))
 
-		-- Model
 		local model = self.scroll:Add("DLabel")
 		model:SetText("Model")
 		model:DockMargin(3, 3, 3, 3)
@@ -480,7 +464,6 @@ local PANEL = {}
 		self.model:DockMargin(3, 3, 3, 3)
 		self.model:SetText(entity:GetModel())
 
-		-- Save
 		self.save = self:Add("DButton")
 		self.save:Dock(BOTTOM)
 		self.save:DockMargin(0, 5, 0, 0)
@@ -537,7 +520,7 @@ local PANEL = {}
 				
 				local cashadjustment = self.adj:GetValue()
 				local money = self.money:GetValue()
-				-- need to add money
+				
 				netstream.Start("nut_VendorData", {entity, data, vendorAction, cashadjustment, money, factionData, classData, self.name:GetText(), self.desc:GetText(), self.model:GetText() or entity:GetModel()})
 
 				timer.Simple(LocalPlayer():Ping() / 50, function()

@@ -42,8 +42,6 @@ if (SERVER) then
 			entity:SetAnim()
 		end
 	end
-
-	
 	
 	function PLUGIN:SaveData()
 		local data = {}
@@ -88,7 +86,6 @@ nut.command.Register({
 		nut.util.Notify("You have added a vendor.", client)
 	end
 }, "vendoradd")
-
 
 nut.command.Register({
 	adminOnly = true,
